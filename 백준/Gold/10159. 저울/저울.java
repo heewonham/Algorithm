@@ -9,54 +9,33 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
         int m = Integer.parseInt(br.readLine());
 
-        // init
-        List<Integer>[] child = new List[n+1];
-        List<Integer>[] par = new List[n+1];
-        for(int i = 1; i <= n; i++){
-            child[i] = new ArrayList<>();
-            par[i] = new ArrayList<>();
-
-        }
-
-        // input
+        boolean[][] conn = new boolean[n+1][n+1];
         for(int i = 0; i < m; i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            child[a].add(b);
-            par[b].add(a);
+            conn[a][b] = true;
         }
 
-        StringBuilder sb = new StringBuilder();
-        for(int i = 1; i <= n; i++){
-            boolean[] visited = new boolean[n+1];
-            int up = find(par, visited, i);
-            visited = new boolean[n+1];
-            int down = find(child, visited, i);
-            int ans = n-(up + down)-1;
-            sb.append(ans + "\n");
-        }
-
-        System.out.println(sb);
-    }
-    static int find(List<Integer>[] conn, boolean[] v, int idx){
-
-        Queue<Integer> q = new LinkedList<>();
-        q.add(idx);
-        int cnt = 0;
-        while(!q.isEmpty()){
-            int cur = q.poll();
-
-            for(int i = 0; i < conn[cur].size(); i++){
-                int next = conn[cur].get(i);
-                if(!v[next]){
-                    v[next] = true;
-                    q.add(next);
-                    cnt++;
+        for(int k = 1; k <= n; k++){
+            for(int i = 1; i <= n; i++){
+                for(int j = 1; j <= n; j++){
+                    if(conn[i][k] &&  conn[k][j]){
+                        conn[i][j] = true;
+                    }
                 }
             }
         }
 
-        return cnt;
+        StringBuilder sb = new StringBuilder();
+        for(int i=1; i<=n; i++){
+            int cnt = 0;
+            for(int j = 1; j <= n; j++){
+                if(!conn[i][j] && !conn[j][i]) cnt++;
+            }
+            sb.append((cnt-1)+"\n");
+        }
+
+        System.out.println(sb);
     }
 }
