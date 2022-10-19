@@ -7,7 +7,6 @@ class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int test = Integer.parseInt(br.readLine());
-        StringBuilder sb = new StringBuilder();
 
         while(test-- > 0){
             int n = Integer.parseInt(br.readLine());
@@ -25,30 +24,20 @@ class Main {
                     answer += findCircle(i, lists, visited);
                 }
             }
-            sb.append((n - answer) + "\n");
+            System.out.println((n - answer));
         }
-        System.out.println(sb);
     }
-    static int findCircle(int s, int[] lists, boolean[] visited){
-
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(s);
-        visited[s] = true;
+    static int findCircle(int next, int[] lists, boolean[] visited){
 
         Stack<Integer> stack = new Stack<>();
-        int last = s;
+        int last = next;
+        stack.add(next);
 
-        // 모든 연결 찾기
-        while(!queue.isEmpty()){
-            int cur = queue.poll();
-            last = cur;
-            stack.add(cur);
-
-            int next = lists[cur];
-            if(!visited[next]){
-                visited[next] = true;
-                queue.add(next);
-            }
+        while(!visited[next]){
+            visited[next] = true;
+            stack.add(next);
+            last = next;
+            next = lists[next];
         }
 
         // 마지막 도착지랑 같은 순환 찾기
